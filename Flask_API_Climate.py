@@ -78,6 +78,19 @@ def temps():
     return jsonify(ly_temp)
 
 
+@app.route("/2017-04-07")
+def show_start_date():
+    start_date = '2017-04-07'
+    end_date   = '2017-04-21 '
+    
+    if end_date != " ":
+        data = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
+    else:
+        data = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >= start_date).all()
+
+    data_list = list(np.ravel(data))
+    
+    return jsonify(data_list)
 
 if __name__ == "__main__":
     app.run(debug=True)
